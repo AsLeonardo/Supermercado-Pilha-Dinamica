@@ -1,32 +1,42 @@
 import java.util.Scanner;
 
+// Classe que representa cada item da pilha (compra ou venda)
 class Compra {
     String data;
     String produto;
     double valorCompra;
     double valorVenda;
-    int quantidade;
-    int quantidadeTotal;
+    int quantidade;        // Quanto foi adicionado (+) ou removido (-)
+    int quantidadeTotal;   // Estoque total APÓS essa operação
     Compra prox;
 
-    public Compra(String data, String produto, double valorCompra, int quantidade, int quantidadeTotal , Compra prox) {
+    public Compra(String data, String produto, double valorCompra, int quantidade, int quantidadeTotal, Compra prox) {
         this.data = data;
         this.produto = produto;
         this.valorCompra = valorCompra;
-        this.valorVenda = valorCompra; // Sempre assume o último valor de compra
+        this.valorVenda = Math.abs(valorCompra); // sempre positivo para exibição
         this.quantidade = quantidade;
         this.quantidadeTotal = quantidadeTotal;
         this.prox = prox;
     }
 }
 
+// Pilha dinâmica
 class Pilha {
     private Compra topo;
 
+    // Adiciona uma nova compra (ou venda) no topo da pilha
     public void push(String data, String produto, double valorCompra, int quantidade) {
-        topo = new Compra(data, produto, valorCompra, quantidade, topo);
+        int quantidadeTotalAnterior = 0;
+        if (topo != null && topo.produto.equals(produto)) {
+            quantidadeTotalAnterior = topo.quantidadeTotal;
+        }
+        int novaQuantidadeTotal = quantidadeTotalAnterior + quantidade;
+
+        topo = new Compra(data, produto, valorCompra, quantidade, novaQuantidadeTotal, topo);
     }
 
+    // Remove o topo (não usado no projeto, mas incluso por completude)
     public Compra pop() {
         if (topo == null) return null;
         Compra removida = topo;
@@ -34,29 +44,43 @@ class Pilha {
         return removida;
     }
 
+    // Retorna a última operação (compra ou venda)
     public Compra peek() {
         return topo;
     }
 
+    // Exibe o histórico da pilha (do mais recente ao mais antigo)
     public void exibirHistorico() {
         Compra atual = topo;
         while (atual != null) {
-            System.out.println("\nData: " + atual.data + " | Produto: " + atual.produto + " | Preço de Compra: " + atual.valorCompra + " | Quantidade: " + atual.quantidade + " | Quantidade Total: " + atual.quantidadeTotal);
+            String tipo = atual.quantidade > 0 ? "Compra" : "Venda";
+            System.out.println(
+                "\n" + tipo + ":" +
+                "\nData: " + atual.data +
+                " | Produto: " + atual.produto +
+                " | Preço de Compra: " + atual.valorCompra +
+                " | Preço de Venda: " + atual.valorVenda +
+                " | Quantidade: " + atual.quantidade +
+                " | Quantidade Total: " + atual.quantidadeTotal
+            );
             atual = atual.prox;
         }
     }
 }
-
+// Classe principal com o menu
 public class Supermercado {
     static Pilha compras = new Pilha();
-    static Pilha vendas = new Pilha();
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n1- Registrar Compra\n2- Registrar Venda\n3- Histórico de Compras\n4- Histórico de Vendas\n5- Sair\n");
+            System.out.println("\n1- Registrar Compra");
+            System.out.println("2- Registrar Venda");
+            System.out.println("3- Histórico");
+            System.out.println("4- Sair\n");
+
             int opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpar buffer
+            scanner.nextLine(); // limpar buffer
 
             switch (opcao) {
                 case 1:
@@ -69,12 +93,10 @@ public class Supermercado {
                     compras.exibirHistorico();
                     break;
                 case 4:
-                    vendas.exibirHistorico();
-                    break;
-                case 5:
+                    System.out.println("Saindo...");
                     return;
                 default:
-                    System.out.println("\nOpção inválida!\n");
+                    System.out.println("\nOpçao inválida!");
             }
         }
     }
@@ -84,7 +106,7 @@ public class Supermercado {
         String data = scanner.nextLine();
         System.out.print("Produto: ");
         String produto = scanner.nextLine();
-        System.out.print("Valor de compra: ");
+        System.out.print("Preço de compra: ");
         double valorCompra = scanner.nextDouble();
         System.out.print("Quantidade: ");
         int quantidade = scanner.nextInt();
@@ -99,23 +121,27 @@ public class Supermercado {
             System.out.println("\nNenhuma compra registrada!");
             return;
         }
+
         System.out.print("\nProduto vendido: ");
         String produto = scanner.nextLine();
-        System.out.print("\nQuantidade vendida: ");
+        System.out.print("Quantidade vendida: ");
         int quantidadeVendida = scanner.nextInt();
         scanner.nextLine();
 
-        Compra ultimaCompra = compras.peek();
-        if (ultimaCompra != null && ultimaCompra.produto.equals(produto)) {
-            if (ultimaCompra.quantidade >= quantidadeVendida) {
-                ultimaCompra.quantidade -= quantidadeVendida;
-                vendas.push(ultimaCompra.data, produto, ultimaCompra.valorVenda, quantidadeVendida);
-                System.out.println("\nVenda registrada!");
-            } else {
-                System.out.println("\nEstoque insuficiente!");
-            }
-        } else {
-            System.out.println("\nProduto não encontrado!");
+        Compra ultima = compras.peek();
+        if (!ultima.produto.equals(produto)) {
+            System.out.println("\nProduto nao encontrado!");
+            return;
         }
+
+        int estoqueAtual = ultima.quantidadeTotal;
+        if (estoqueAtual < quantidadeVendida) {
+            System.out.println("\nEstoque insuficiente! Estoque atual: " + estoqueAtual);
+            return;
+        }
+
+        // Insere como venda (quantidade negativa)
+        compras.push(ultima.data, produto, -ultima.valorVenda, -quantidadeVendida);
+        System.out.println("\nVenda registrada!");
     }
 }
