@@ -12,6 +12,9 @@ quantidadeTotal) e possibilita ao usuário visualizar todo o histórico de trans
 funcionalidade de exibir o histórico diferencia compras de vendas, facilitando a
 compreensão do fluxo de operações realizadas.
 
+Apresentação -
+https://www.youtube.com/watch?v=rCWjNbWN8hs
+
 Progamas necessários - Java
 
 Como executar o código -
