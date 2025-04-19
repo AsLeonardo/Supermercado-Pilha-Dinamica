@@ -13,7 +13,7 @@ funcionalidade de exibir o histórico diferencia compras de vendas, facilitando 
 compreensão do fluxo de operações realizadas.
 
 Como executar o código -
-"java Supemercado" No Terminal onde se encontra as classes e código.
+"java Supemercado.java" No Terminal onde se encontra as classes e código.
 
 Progamas necessários - Java
 https://www.java.com/pt-BR/download/
