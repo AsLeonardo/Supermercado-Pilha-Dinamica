@@ -12,15 +12,16 @@ quantidadeTotal) e possibilita ao usuário visualizar todo o histórico de trans
 funcionalidade de exibir o histórico diferencia compras de vendas, facilitando a
 compreensão do fluxo de operações realizadas.
 
-Apresentação -
-https://www.youtube.com/watch?v=rCWjNbWN8hs
-
-Progamas necessários - Java
-
 Como executar o código -
 "java Supemercado" No Terminal onde se encontra as classes e código.
 
-Leonardo Alves Silva - 10723113466
+Progamas necessários - Java
+https://www.java.com/pt-BR/download/
+
+Apresentação -
+https://www.youtube.com/watch?v=rCWjNbWN8hs
 
 Link para o Projeto -
 https://github.com/AsLeonardo/Supermercado-Pilha-Dinamica
+
+Leonardo Alves Silva - 10723113466
