@@ -15,10 +15,10 @@ compreensão do fluxo de operações realizadas.
 # Como executar o código -
 "java Supemercado.java" No Terminal onde se encontra as classes e código.
 
-# Progamas necessários - Java
+### Progamas necessários - Java
 https://www.java.com/pt-BR/download/
 
-# Apresentação -
+## Apresentação -
 https://www.youtube.com/watch?v=rCWjNbWN8hs
 
 # Link para o Projeto -
